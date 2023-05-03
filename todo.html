@@ -6,7 +6,7 @@
     <meta charset="UTF-8" />
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <title>Vue</title>
-    <link rel="stylesheet" href="test08.css" />
+    <link rel="stylesheet" href="todo.css" />
   </head>
   <body>
     
@@ -22,6 +22,12 @@
           <input v-on:keyup.enter="insert()" v-model="todo_input" class="todo_input" type="text">
           <button @click="insert()" class="todo_insert">등록</button>
         </div>
+    </div>
+
+    <div @click="start()" id="timer">
+      <span id="hour">{{ hour }}</span>
+      <span id="min">{{ min }}</span>
+      <span id="sec">{{ sec }}</span>
     </div>
 
     
@@ -57,6 +63,38 @@
             }
           }
         }
+      });
+      const timer = new Vue({
+        el: "#timer",
+        data: {
+          hour: 0,
+          min: 0,
+          sec: 0,
+          on: false,
+        },
+        methods: {
+          timelapse() {
+            this.sec += 1;
+            if (this.sec >= 60) {
+              this.sec = 0;
+              this.min += 1;
+            }
+            if (this.min >= 60) {
+              this.min = 0;
+              this.hour += 1;
+            }
+          },
+          start() {
+            let clock;
+            if (!this.on) {
+              clock = setInterval(this.timelapse, 1000);
+              this.on = true;
+            } else {
+              clearInterval(clock);
+              this.on = false;
+            }
+          }
+        },
       });
     </script>
   </body>
