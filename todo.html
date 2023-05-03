@@ -1,0 +1,63 @@
+<!-- 투두리스트 마숙 ㅋ -->
+
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <title>Vue</title>
+    <link rel="stylesheet" href="test08.css" />
+  </head>
+  <body>
+    
+    <div id="todo">
+        <h1>T O D O L I S T</h1>
+        <hr class="border">
+        <div v-for="todo in todolist" class="todo_list">
+          <span class="todo_check">✔</span>
+          <span @click="done()" class="todo_text">{{ todo }}</span>
+        </div>
+        <p class="today_count" v-if="count > 0"><span class="star">&#9733;</span>오늘 한 일 {{ count }}개<span class="star">&#9733;</span></p>
+        <div class="todo_form">
+          <input v-on:keyup.enter="insert()" v-model="todo_input" class="todo_input" type="text">
+          <button @click="insert()" class="todo_insert">등록</button>
+        </div>
+    </div>
+
+    
+    <script>
+      const todo = new Vue({
+        el: "#todo",
+        data() {
+          return {
+            todolist: [],
+            todo_input: "",
+            count: 0,
+          };
+        },
+        methods: {
+          insert () {
+            if (this.todo_input === "") {
+              alert("할 일을 입력하세요");
+            } else {
+              this.todolist.push(this.todo_input);
+              this.todo_input = "";
+            }
+          },
+          done () {
+            var e = event.target;
+            if (e.classList.contains("todo_text")) {
+              e.classList.toggle("todo_text");
+              e.classList.toggle("todo_text_done");
+              this.count += 1;
+            } else {
+              e.classList.toggle("todo_text");
+              e.classList.toggle("todo_text_done");
+              this.count -= 1;
+            }
+          }
+        }
+      });
+    </script>
+  </body>
+</html>

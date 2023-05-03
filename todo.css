@@ -1,0 +1,96 @@
+html {
+    height: 100%;
+}
+body {
+    background-color: rgb(158, 248, 218);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+}
+#todo {
+    border-radius: 10px;
+    box-shadow: 10px 10px 10px gray;
+    background-color: white;
+    color: black;
+    height: auto;
+    width: 500px;
+    margin: auto;
+    text-align: center;
+    padding: 30px;
+}
+
+.border {
+    height: 10px;
+    background-color: aquamarine;
+    border: 0;
+}
+#todo h1  {
+    margin-top: 0;
+    font-size: 40px;
+    text-align: center;
+    color: rgb(91, 251, 198);
+}
+
+.todo_list {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    font-size: 25px;
+    color: gray;
+}
+
+.star {
+    color: rgb(158, 248, 218);
+    margin-left: 5px;
+    margin-right: 5px;
+    font-size: 25px;
+}
+.todo_check {
+    font-size: 25px;
+    margin-right: 10px;
+}
+.todo_text {
+    text-decoration-line: none; 
+}
+
+.todo_text_done {
+    text-decoration-line: line-through; 
+    text-decoration-color: rgb(248, 112, 112); 
+    text-decoration-thickness: 5px;
+}
+
+.today_count {
+    color: gray;
+}
+
+.todo_form {
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.todo_input {
+    border: none;
+    box-shadow: 0 0 10px rgb(181, 181, 181);
+    height: 30px;
+    width: 400px;
+    margin-right: 5px;
+}
+
+.todo_input:focus {
+    outline: none;
+    box-shadow: 0 0 10px rgb(91, 251, 198);
+}
+
+.todo_insert {
+    border-radius: 5px;
+    height: 35px;
+    width: 50px;
+    border: none;
+    background-color: rgb(158, 248, 218);
+    color: white;
+}
+
+.todo_insert:hover {
+    box-shadow: 0 0 10px rgb(181, 181, 181);
+}
