@@ -1,37 +1,85 @@
-<!-- 투두리스트 마숙 ㅋ -->
+<!-- 투두 수정, 삭제 -->
+<!-- 과목 수정, 삭제 -->
+<!-- 색깔 인풋 받아서 커스텀하기 -->
+
 
 <!DOCTYPE html>
 <html lang="ko">
   <head>
     <meta charset="UTF-8" />
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-    <title>Vue</title>
+    <title>STUDY WITH YAONG</title>
     <link rel="stylesheet" href="todo.css" />
   </head>
   <body>
-    
-    <div id="todo">
+    <button id="endofday">오늘 끝!</button>
+    <div id="todo" class="selected">
+        <div id="pick_todo" @click="select()">
+          TODO
+        </div>
         <h1>T O D O L I S T</h1>
         <hr class="border">
-        <div v-for="todo in todolist" class="todo_list">
-          <span class="todo_check">✔</span>
-          <span @click="done()" class="todo_text">{{ todo }}</span>
+        <div class="list">
+          <div v-for="todo in todolist" class="todo_list">
+            <span class="todo_check">✔</span>
+            <span @click="done()" class="todo_text">{{ todo }}</span>
+          </div>
         </div>
-        <p class="today_count" v-if="count > 0"><span class="star">&#9733;</span>오늘 한 일 {{ count }}개<span class="star">&#9733;</span></p>
+        <p class="today_count" v-if="count > 0"><span class="star">&#9733;</span>오늘 한 일 <b>{{ count }}</b>개<span class="star">&#9733;</span></p>
+        <p class="today_count" v-if="count == 0"><span class="star">&#9733;</span>오늘도 화이팅<span class="star">&#9733;</span></p>
         <div class="todo_form">
           <input v-on:keyup.enter="insert()" v-model="todo_input" class="todo_input" type="text">
           <button @click="insert()" class="todo_insert">등록</button>
         </div>
     </div>
-
-    <div @click="start()" id="timer">
-      <span id="hour">{{ hour }}</span>
-      <span id="min">{{ min }}</span>
-      <span id="sec">{{ sec }}</span>
+    <div id="timer">
+      <div id="pick_timer" @click="select()">
+        TIMER
+      </div>
+      <h1>T I M E R</h1>
+      <hr class="border">
+      <div v-if="!current" class="subject_form">
+        <input placeholder="무엇을 공부할건가요?" v-on:keyup.enter="insert_sub()" v-model="input" class="todo_input" type="text">
+        <button @click="insert_sub()" class="todo_insert">등록</button>
+      </div>
+      <p class="current" v-if="current && !on"><b>{{ current }}</b> 쉬는중</p>
+      <p class="current" v-if="current && on"><b>{{ current }}</b> 공부중</p>
+      <div class="clock">
+        <span id="hour"><span v-if="hour < 10">0</span>{{ hour }}</span>
+        <span id="min"><span v-if="min < 10">0</span>{{ min }}</span>
+        <span id="sec"><span v-if="sec < 10">0</span>{{ sec }}</span>
+      </div>
+      <div class="subject_list" >
+        <p v-for="s in saved" class="saved_list">✔ <b>{{ s.subject }}</b>
+          <span v-if="s.hour < 10">0</span>{{ s.hour }} :</span>
+          <span v-if="s.min < 10">0</span>{{ s.min }} :</span>
+          <span v-if="s.sec < 10">0</span>{{ s.sec }}</span>
+        </p>
+      </div>
+      <div class="buttonarea">
+        <button class="startofclock" @click="start()">시작</button>
+        <button class="save" @click="save()">저장</button>
+      </div>
     </div>
+
+    <footer class="footer">
+      <p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-github github" viewBox="0 0 16 16">
+          <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+        </svg>
+        <a href="https://github.com/yaonggod">y a o n g g o d</a>
+      </p>
+    </footer>
 
     
     <script>
+      let eod = document.querySelector("#endofday");
+      eod.addEventListener("click", function() {
+        alert("수고하셨습니다.");
+        location.reload();
+      })
+
+      let clock;
       const todo = new Vue({
         el: "#todo",
         data() {
@@ -42,6 +90,12 @@
           };
         },
         methods: {
+          select() {
+            var todo = document.querySelector("#todo");
+            var timer = document.querySelector("#timer");
+            todo.classList.add("selected");
+            timer.classList.remove("selected");
+          },
           insert () {
             if (this.todo_input === "") {
               alert("할 일을 입력하세요");
@@ -71,8 +125,17 @@
           min: 0,
           sec: 0,
           on: false,
+          input: "",
+          current: "",
+          saved: [],
         },
         methods: {
+          select() {
+            var todo = document.querySelector("#todo");
+            var timer = document.querySelector("#timer");
+            todo.classList.remove("selected");
+            timer.classList.add("selected");
+          },
           timelapse() {
             this.sec += 1;
             if (this.sec >= 60) {
@@ -85,15 +148,75 @@
             }
           },
           start() {
-            let clock;
+            var e = event.target
             if (!this.on) {
-              clock = setInterval(this.timelapse, 1000);
-              this.on = true;
+              if (!this.current) {
+                alert("과목을 입력하세요");
+              } else {
+                clock = setInterval(this.timelapse, 1000);
+                this.on = true;
+                e.classList.toggle("startofclock");
+                e.classList.toggle("endofclock");
+                e.innerText = "정지";
+              }
             } else {
               clearInterval(clock);
               this.on = false;
+              e.classList.toggle("startofclock");
+              e.classList.toggle("endofclock");
+              e.innerText = "시작";
             }
-          }
+          },
+          insert_sub () {
+            if (this.input === "") {
+              alert("과목을 입력하세요");
+            } else {
+              this.current = this.input;
+              this.input = "";
+            }
+          },
+          save() {
+            if (this.current === "") {
+              alert("저장된 과목이 없어요");
+            }
+            else if (this.on === true) {
+              alert("시계를 정지해주세요");
+            }
+            else {
+              let find = false;
+              for (let sub of this.saved) {
+                if (sub.subject === this.current) {
+                  find = true;
+                  sub.sec += this.sec;
+                  if (sub.sec >= 60) {
+                    sub.sec -= 60;
+                    sub.min += 1;
+                  }
+                  sub.min += this.min;
+                  if (sub.min >= 60) {
+                    sub.min -= 60;
+                    sub.hour += 1;
+                  }
+                  sub.hour += this.hour;
+                  break;
+                }
+              }
+              if (find == false) {
+                let s = {
+                  subject: this.current,
+                  hour: this.hour,
+                  min: this.min,
+                  sec: this.sec,
+                }
+                this.saved.push(s);
+              }
+              this.current = "";
+              this.sec = 0;
+              this.min = 0;
+              this.hour = 0;
+              }
+                          
+            }
         },
       });
     </script>
